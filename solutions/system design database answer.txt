@@ -1,0 +1,18 @@
+question 2:
+- unique index room_id,stay_date on booking_room_night prevent double booking, check not exist in each room on small index instead scanning whole table
+- index (hotel_id, status, room_type_id) on room to finds a hotel's active rooms directly
+- index (city) on hotel	because customers usually search in a location first, which narrows the hotels before checking rooms.
+- index (booking_id) on booking_room_night because cancelling finds and deletes the booking's nights quickly. 
+question 3:
+1,create index on status,create_at,id -> jump to pending rather than scan whole table
+2, cut into small transaction:
+each transaction only process 5000 
+
+question 4: 
+on frontend I will disable button as soon as it clicked 
+When paying for an existing booking, change the status with a conditional update so only one request can win:
+
+UPDATE booking
+SET    status = 'PAYING'
+WHERE  id = ? AND status = 'PENDING';
+
